@@ -5,10 +5,14 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.casosemestral.model.data.cliente.ClienteEntity
 import com.example.casosemestral.model.data.local.AppDatabase
+import com.example.casosemestral.model.data.repository.ClienteRepository
 import com.example.casosemestral.model.data.repository.VentaRepository
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -20,6 +24,19 @@ class VentaFormInsertViewModel (app: Application): AndroidViewModel(app){
     private val repo: VentaRepository = VentaRepository(
         AppDatabase.getDatabase(app).ventaDao()
     )
+
+    // SE INVOCA EL REPO DE CLIENTES PARA USAR LA LISTA DE CLIENTES EN LA PANTALLA
+    private val clienteRepository: ClienteRepository = ClienteRepository(
+        AppDatabase.getDatabase(app).clienteDao()
+    )
+
+    // EXPONEMOS LA LISTA DE CLIENTES DESDE LA BD HACIA LA UI DE FORMA REACTIVA
+    val listaClientes: StateFlow<List<ClienteEntity>> = clienteRepository.obtenerClientes()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = emptyList()
+        )
 
     // ESTADO INTERNO MUTABLE
     private val _estado = MutableStateFlow(VentaFormInsertUiState())

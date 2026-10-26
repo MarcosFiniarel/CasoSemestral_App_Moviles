@@ -67,6 +67,7 @@ fun VentaFormScreen(
 
     // ESTADO PARA PODER SCROLLEAR
     val scrollState = rememberScrollState()
+    val scrollStateCliente = rememberScrollState()
 
     // ESTADOS PARA EL SNACKBAR FLOTANTE
     val snackbarHostState = remember { SnackbarHostState() }
@@ -102,19 +103,64 @@ fun VentaFormScreen(
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
 
-                // CAMPO CLIENTE
-                OutlinedTextField(
-                    value = estado.cliente,
-                    onValueChange = vm::onClienteChange,
-                    label = { Text("Cliente") },
-                    isError = estado.errors.cliente != null,
-                    supportingText = {
-                        estado.errors.cliente?.let {
-                            Text(it, color = MaterialTheme.colorScheme.error)
-                        }
-                    },
+                // OBSERVAMOS LA LISTA DE CLIENTES QUE VIENE DESDE EL VIEWMODEL
+                val clientes by vm.listaClientes.collectAsState()
+                var expandedCliente by remember { mutableStateOf(false) }
+
+                // CAMPO CLIENTE CON MENÚ DESPLEGABLE
+                ExposedDropdownMenuBox(
+                    expanded = expandedCliente,
+                    onExpandedChange = { expandedCliente = !expandedCliente },
                     modifier = Modifier.fillMaxWidth()
-                )
+                ) {
+                    OutlinedTextField(
+                        value = estado.cliente,
+                        onValueChange = {},
+                        readOnly = true,
+                        label = { Text("Cliente") },
+                        trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedCliente) },
+                        isError = estado.errors.cliente != null,
+                        supportingText = {
+                            estado.errors.cliente?.let {
+                                Text(it, color = MaterialTheme.colorScheme.error)
+                            }
+                        },
+                        modifier = Modifier
+                            .menuAnchor()
+                            .fillMaxWidth(),
+                        colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors()
+                    )
+
+                    ExposedDropdownMenu(
+                        expanded = expandedCliente,
+                        onDismissRequest = { expandedCliente = false }
+                    ) {
+                        Column(
+                            modifier = Modifier.heightIn(max = 180.dp)
+                                               .verticalScroll(scrollStateCliente)
+                        ) {
+                            if (clientes.isEmpty()) {
+                                DropdownMenuItem(
+                                    text = { Text("No hay clientes registrados") },
+                                    onClick = { expandedCliente = false }
+                                )
+                            } else {
+                                clientes.forEach { cliente ->
+
+                                    val textoFila = "${cliente.nombre} (${cliente.correo})"
+
+                                    DropdownMenuItem(
+                                        text = { Text(textoFila) },
+                                        onClick = {
+                                            vm.onClienteChange(textoFila)
+                                            expandedCliente = false
+                                        }
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
 
                 // CAMPO CONVENIO O SERVICIO
                 OutlinedTextField(
