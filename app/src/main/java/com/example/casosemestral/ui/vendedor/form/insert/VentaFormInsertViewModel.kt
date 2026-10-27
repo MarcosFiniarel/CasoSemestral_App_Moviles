@@ -7,11 +7,17 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.casosemestral.model.data.cliente.ClienteEntity
 import com.example.casosemestral.model.data.local.AppDatabase
+import com.example.casosemestral.model.data.proveedor.ProveedorEntity
 import com.example.casosemestral.model.data.repository.ClienteRepository
+import com.example.casosemestral.model.data.repository.ProveedorRepository
+import com.example.casosemestral.model.data.repository.ServicioRepository
 import com.example.casosemestral.model.data.repository.VentaRepository
+import com.example.casosemestral.model.data.servicio.ServicioEntity
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -32,7 +38,43 @@ class VentaFormInsertViewModel (app: Application): AndroidViewModel(app){
 
     // EXPONEMOS LA LISTA DE CLIENTES DESDE LA BD HACIA LA UI DE FORMA REACTIVA
     val listaClientes: StateFlow<List<ClienteEntity>> = clienteRepository.obtenerClientes()
-        .stateIn(
+                                                                         .stateIn(
+                                                                             scope = viewModelScope,
+                                                                             started = SharingStarted.WhileSubscribed(5000),
+                                                                             initialValue = emptyList()
+                                                                         )
+
+    // SE INVOCA EL REPO DE SERVICIOS PARA USAR LA LISTA DE SERVICIOS EN LA PANTALLA
+    private val servicioRepository: ServicioRepository = ServicioRepository(
+        AppDatabase.getDatabase(app).servicioDao()
+    )
+
+    // EXPONEMOS LA LISTA DE SERVICIOS DESDE LA BD HACIA UI DE FORMA REACTIVA
+    val listaServicios: StateFlow<List<ServicioEntity>> = servicioRepository.obtenerServicios()
+                                                                            .stateIn(
+                                                                                scope = viewModelScope,
+                                                                                started = SharingStarted.WhileSubscribed(5000),
+                                                                                initialValue = emptyList()
+                                                                            )
+
+    // SE INVOCA EL REPO DE PROVEEDOR PARA USAR LA LISTA DE PROVEEDORES EN LA PANTALLA
+    private val proveedorRepository: ProveedorRepository = ProveedorRepository(
+        AppDatabase.getDatabase(app).proveedorDao()
+    )
+
+    // SE CREA UNA STATE FLOW INTERNA QUE GUARDA EL ID DEL SERVICIO ACTUALMENTE SELECCIONADO
+    private val _servicioIdSeleccionado = MutableStateFlow<Long?>(null)
+
+    // SE CREA LA LISTA VACIA PARA QUE CUANDO EL CAMPO DE SERVICIO CAMBIE SE BUSCA LA LISTA DE PROVEEDORES DE FORMA REACTIVA
+    @OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
+    val listaProveedoresAsociados: StateFlow<List<ProveedorEntity>> = _servicioIdSeleccionado
+        .flatMapLatest { servicioId ->
+            if (servicioId == null) {
+                flowOf(emptyList())
+            } else {
+                proveedorRepository.obtenerProveedoresDeServicio(servicioId)
+            }
+        }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = emptyList()
@@ -52,10 +94,11 @@ class VentaFormInsertViewModel (app: Application): AndroidViewModel(app){
         }
     }
 
-    fun onConvenioOServicioChange(value: String){
+    fun onConvenioOServicioChange(servicioId: Long, value: String){
         _estado.update {
-            it.copy(convenioOServicio = value, errors = it.errors.copy(convenioOServicio = null))
+            it.copy(convenioOServicio = value, errors = it.errors.copy(convenioOServicio = null), prestadorAsociado = "")
         }
+        _servicioIdSeleccionado.value = servicioId
     }
 
     fun onPrestadorAsociadoChange(value: String){

@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
@@ -59,6 +60,8 @@ fun VentaFormUpdateScreen(
 
     val estado by vm.estado.collectAsState()
     val scrollState = rememberScrollState()
+    val scrollStateServicio = rememberScrollState()
+    val scrollStateProveedor = rememberScrollState()
 
     Column(
         Modifier
@@ -85,33 +88,117 @@ fun VentaFormUpdateScreen(
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
 
-            // CAMPO CONVENIO O SERVICIO
-            OutlinedTextField(
-                value = estado.convenioNuevo,
-                onValueChange = vm::onConvenioNuevoChange,
-                label = { Text("Convenio o Servicio") },
-                isError = estado.errors.convenioNuevo != null,
-                supportingText = {
-                    estado.errors.convenioNuevo?.let {
-                        Text(it, color = MaterialTheme.colorScheme.error)
-                    }
-                },
-                modifier = Modifier.fillMaxWidth()
-            )
+            // OBSERVAMOS LA LISTA DE SERVICIOS QUE VIENE DESDE EL VIEWMODEL
+            val servicios by vm.listaServicios.collectAsState()
+            var expandedServicios by remember { mutableStateOf(false) }
 
-            // CAMPO PRESTADOR ASOCIADO
-            OutlinedTextField(
-                value = estado.prestadorNuevo,
-                onValueChange = vm::onPrestadorNuevoChange,
-                label = { Text("Prestador Asociado") },
-                isError = estado.errors.prestadorNuevo != null,
-                supportingText = {
-                    estado.errors.prestadorNuevo?.let {
-                        Text(it, color = MaterialTheme.colorScheme.error)
-                    }
-                },
+            // CAMPO CONVENIO O SERVICIO CON MENÚ DESPLEGABLE
+            ExposedDropdownMenuBox(
+                expanded = expandedServicios,
+                onExpandedChange = { expandedServicios = !expandedServicios },
                 modifier = Modifier.fillMaxWidth()
-            )
+            ) {
+                OutlinedTextField(
+                    value = estado.convenioNuevo,
+                    onValueChange = {},
+                    readOnly = true,
+                    label = { Text("Convenio o Servicio") },
+                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedServicios) },
+                    isError = estado.errors.convenioNuevo != null,
+                    supportingText = {
+                        estado.errors.convenioNuevo?.let {
+                            Text(it, color = MaterialTheme.colorScheme.error)
+                        }
+                    },
+                    modifier = Modifier
+                        .menuAnchor()
+                        .fillMaxWidth(),
+                    colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors()
+                )
+
+                ExposedDropdownMenu(
+                    expanded = expandedServicios,
+                    onDismissRequest = { expandedServicios = false }
+                ) {
+                    Column(
+                        modifier = Modifier.heightIn(max = 180.dp)
+                            .verticalScroll(scrollStateServicio)
+                    ) {
+                        if (servicios.isEmpty()) {
+                            DropdownMenuItem(
+                                text = { Text("No hay servicios o convenios registrados") },
+                                onClick = { expandedServicios = false }
+                            )
+                        } else {
+                            servicios.forEach { servicio ->
+                                DropdownMenuItem(
+                                    text = { Text(servicio.nombre) },
+                                    onClick = {
+                                        vm.onConvenioNuevoChange(servicio.id,servicio.nombre)
+                                        expandedServicios = false
+                                    }
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+
+            // OBSERVAMOS LA LISTA DE PRESTADORES ASOCIADOS QUE VIENE DESDE EL VIEWMODEL
+            val proveedores by vm.listaProveedoresAsociados.collectAsState()
+            var expandedProveedores by remember { mutableStateOf(false) }
+
+            // CAMPO PRESTADORES ASOCIADOS CON MENÚ DESPLEGABLE
+            ExposedDropdownMenuBox(
+                expanded = expandedProveedores,
+                onExpandedChange = { expandedProveedores = !expandedProveedores },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                OutlinedTextField(
+                    value = estado.prestadorNuevo,
+                    onValueChange = {},
+                    readOnly = true,
+                    label = { Text("Prestador Asociado") },
+                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedProveedores) },
+                    isError = estado.errors.prestadorNuevo != null,
+                    supportingText = {
+                        estado.errors.prestadorNuevo?.let {
+                            Text(it, color = MaterialTheme.colorScheme.error)
+                        }
+                    },
+                    modifier = Modifier
+                        .menuAnchor()
+                        .fillMaxWidth(),
+                    colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors()
+                )
+
+                ExposedDropdownMenu(
+                    expanded = expandedProveedores,
+                    onDismissRequest = { expandedProveedores = false }
+                ) {
+                    Column(
+                        modifier = Modifier.heightIn(max = 180.dp)
+                            .verticalScroll(scrollStateProveedor)
+                    ) {
+                        if (proveedores.isEmpty()) {
+                            DropdownMenuItem(
+                                text = { Text("No hay prestadores asociados registrados") },
+                                onClick = { expandedProveedores = false }
+                            )
+                        } else {
+                            proveedores.forEach { proveedor ->
+                                DropdownMenuItem(
+                                    text = { Text(proveedor.nombre) },
+                                    onClick = {
+                                        vm.onPrestadorNuevoChange(proveedor.nombre)
+                                        expandedProveedores = false
+                                    }
+                                )
+                            }
+                        }
+                    }
+                }
+            }
 
             // CAMPO MONTO
             NumericOutlinedTextField(

@@ -7,10 +7,18 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.example.casosemestral.model.data.local.AppDatabase
+import com.example.casosemestral.model.data.proveedor.ProveedorEntity
+import com.example.casosemestral.model.data.repository.ProveedorRepository
+import com.example.casosemestral.model.data.repository.ServicioRepository
 import com.example.casosemestral.model.data.repository.VentaRepository
+import com.example.casosemestral.model.data.servicio.ServicioEntity
 import com.example.casosemestral.model.data.venta.VentaEntity
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -25,11 +33,47 @@ class VentaFormUpdateViewModel (
         AppDatabase.getDatabase(app).ventaDao()
     )
 
+    // SE INVOCA AL REPOSITORIO DE SERVICIOS
+    private val servicioRepository: ServicioRepository = ServicioRepository(
+        AppDatabase.getDatabase(app).servicioDao()
+    )
+
+    // SE INVOCA AL REPOSITORIO DE PROVEEDORES
+    private val proveedorRepository: ProveedorRepository = ProveedorRepository(
+        AppDatabase.getDatabase(app).proveedorDao()
+    )
+
     // SE RECUPERA EL ID DE LA VENTA DESDE LOS DATOS DE NAVEGACION
     private val ventaId: Long = savedStateHandle["ventaId"] ?: 0L
 
     // SE ESTABLECE LA REFERENCIA A LA ENTIDAD ORIGINAL PARA LUEGO HACER EL UPDATE
     private var ventaOriginal: VentaEntity? = null
+
+    // EXPONEMOS LA LISTA DE SERVICIOS DESDE LA BD HACIA LA UI DE FORMA REACTIVA
+    val listaServicios: StateFlow<List<ServicioEntity>> = servicioRepository.obtenerServicios()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = emptyList()
+        )
+
+    // ESTADO INTERNO PARA EL ID DEL SERVICIO SELECCIONADO EN EDICIÓN
+    private val _servicioIdSeleccionado = MutableStateFlow<Long?>(null)
+
+    // LISTA DE PROVEEDORES DEPENDIENTE DEL SERVICIO SELECCIONADO
+    @OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
+    val listaProveedoresAsociados: StateFlow<List<ProveedorEntity>> = _servicioIdSeleccionado
+        .flatMapLatest { servicioId ->
+            if (servicioId == null) {
+                flowOf(emptyList())
+            } else {
+                proveedorRepository.obtenerProveedoresDeServicio(servicioId)
+            }
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = emptyList()
+        )
 
     // ESTADO INTERNO MUTABLE
     private val _estado = MutableStateFlow(VentaFormUpdateUiState())
@@ -54,10 +98,11 @@ class VentaFormUpdateViewModel (
 
     // FUNCIONES DE MONITOREO DE CAMBIOS EN LOS CAMPOS DE FORM DE VENTAS
 
-    fun onConvenioNuevoChange(value: String){
+    fun onConvenioNuevoChange(servicioId: Long, value: String){
         _estado.update {
-            it.copy(convenioNuevo = value, errors = it.errors.copy(convenioNuevo = null))
+            it.copy(convenioNuevo = value, errors = it.errors.copy(convenioNuevo = null), prestadorNuevo = "")
         }
+        _servicioIdSeleccionado.value = servicioId
     }
 
     fun onPrestadorNuevoChange(value: String){
