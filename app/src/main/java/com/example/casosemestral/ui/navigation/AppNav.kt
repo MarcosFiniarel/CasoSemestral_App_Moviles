@@ -13,6 +13,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -21,6 +22,10 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.casosemestral.ui.camera.QrScannerScreen
 import com.example.casosemestral.ui.camera.QrViewModel
+import com.example.casosemestral.ui.gestor.MenuGestroScreen
+import com.example.casosemestral.ui.gestor.lista.GestorListaScreen
+import com.example.casosemestral.ui.gestor.lista.GestorListaViewModel
+import com.example.casosemestral.ui.gestor.lista.GestorVentaDetailScreen
 import com.example.casosemestral.ui.login.LoginScreen
 import com.example.casosemestral.ui.login.LoginViewModel
 import com.example.casosemestral.ui.vendedor.MenuScreen
@@ -144,10 +149,56 @@ fun AppNav(){
             VentaFormUpdateScreen(navController,ventaFormUpdateViewModel,ventaId,username)
         }
 
-        // FUTURA RUTA A LA PANTALLA DEL GESTOR, SE MANTIENE DIRECCIONANDO A LOGIN PARA PRUEBAS
-        composable(route = "gestor_screen"){
-            val loginViewModel: LoginViewModel = viewModel()
-            LoginScreen(navController,loginViewModel)
+        // RUTA A LA PANTALLA DEL GESTOR
+        composable(route = "gestor_screen/{username}",
+            arguments = listOf(
+                navArgument(name = "username"){
+                    type = NavType.StringType
+                }
+            )
+        ) { backStackEntry ->
+            val username = backStackEntry.arguments?.getString("username").orEmpty()
+            MenuGestroScreen(navController,username)
+        }
+
+        // RUTA A LA LISTA DEL GESTOR, DIFERENCIA SI AUDITORIA O HISTORICO A TRAVES DEL MODO
+        composable(route = "gestor_lista_ventas_screen/{username}/{modo}",
+            arguments = listOf(
+                navArgument(name = "username"){
+                    type = NavType.StringType
+                },
+                navArgument(name = "modo"){
+                    type = NavType.StringType
+                }
+            )
+        ) { backStackEntry ->
+            val username = backStackEntry.arguments?.getString("username").orEmpty()
+            val modo = backStackEntry.arguments?.getString("modo").orEmpty()
+            val gestorListaViewModel: GestorListaViewModel = viewModel()
+            GestorListaScreen(navController,gestorListaViewModel,username,modo)
+        }
+
+        // RUTA AL DETALLE EXTENDIDO PARA LA AUDITORIA
+        composable(
+            route = "gestor_detail_screen/{username}/{ventaId}/{modo}",
+            arguments = listOf(
+                navArgument(name = "username") { type = NavType.StringType },
+                navArgument(name = "ventaId") { type = NavType.LongType },
+                navArgument(name = "modo") { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            val username = backStackEntry.arguments?.getString("username").orEmpty()
+            val ventaId = backStackEntry.arguments?.getLong("ventaId") ?: 0L
+            val gestorListViewModel: GestorListaViewModel = viewModel()
+            val modo = backStackEntry.arguments?.getString("modo").orEmpty()
+
+            GestorVentaDetailScreen(
+                navController = navController,
+                vm = gestorListViewModel,
+                ventaId = ventaId,
+                username = username,
+                modo = modo
+            )
         }
 
         // RUTA PARA EL ESCANER QR

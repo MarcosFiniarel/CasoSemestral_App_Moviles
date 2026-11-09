@@ -1,7 +1,7 @@
 package com.example.casosemestral.model.data.repository
 
-import com.example.casosemestral.model.data.proveedor.ProveedorDao
-import com.example.casosemestral.model.data.proveedor.ProveedorEntity
+import com.example.casosemestral.model.proveedor.ProveedorDao
+import com.example.casosemestral.model.proveedor.ProveedorEntity
 import kotlinx.coroutines.flow.Flow
 
 class ProveedorRepository(

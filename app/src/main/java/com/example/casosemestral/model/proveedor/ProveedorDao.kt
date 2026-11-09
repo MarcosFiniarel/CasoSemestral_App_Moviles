@@ -1,4 +1,4 @@
-package com.example.casosemestral.model.data.proveedor
+package com.example.casosemestral.model.proveedor
 
 import androidx.room.Dao
 import androidx.room.Delete

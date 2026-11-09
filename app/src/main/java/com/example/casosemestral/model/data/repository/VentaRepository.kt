@@ -1,7 +1,7 @@
 package com.example.casosemestral.model.data.repository
 
-import com.example.casosemestral.model.data.venta.VentaDao
-import com.example.casosemestral.model.data.venta.VentaEntity
+import com.example.casosemestral.model.venta.VentaDao
+import com.example.casosemestral.model.venta.VentaEntity
 import kotlinx.coroutines.flow.Flow
 import kotlin.String
 
@@ -77,5 +77,15 @@ class VentaRepository (
     // BUSCAR VENTA POR ID
     suspend fun obtenerVentaPorId(ventaId:Long): VentaEntity?{
         return ventaDao.obtenerVentaPorId(ventaId)
+    }
+
+    // FUNCION PARA LISTAR VENTAS ENVIADAS
+    fun obtenerVentasEnviadas(): Flow<List<VentaEntity>>{
+        return ventaDao.obtenerVentasEnviadas()
+    }
+
+    // FUNCION PARA LISTAR LAS VENTAS AUDITADAS
+    fun obtenerVentasAuditadas(): Flow<List<VentaEntity>>{
+        return  ventaDao.obtenerVentasAuditadas()
     }
 }

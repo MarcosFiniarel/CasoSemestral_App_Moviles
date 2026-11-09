@@ -1,7 +1,6 @@
-package com.example.casosemestral.model.data.user
+package com.example.casosemestral.model.user
 
 import androidx.room.Dao
-import androidx.room.Insert
 import androidx.room.Query
 
 @Dao

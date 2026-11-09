@@ -146,7 +146,7 @@ fun LoginScreen(
                             onExito = { username ->
 
                                 if (estado.esGestor) {
-                                    navController.navigate("gestor_screen") {
+                                    navController.navigate("gestor_screen/$username") {
                                         popUpTo("login_screen") { inclusive = true }
                                     }
                                 } else {

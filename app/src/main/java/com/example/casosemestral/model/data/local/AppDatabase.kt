@@ -5,21 +5,18 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
-import com.example.casosemestral.model.data.cliente.ClienteDao
-import com.example.casosemestral.model.data.cliente.ClienteEntity
-import com.example.casosemestral.model.data.proveedor.ProveedorDao
-import com.example.casosemestral.model.data.proveedor.ProveedorEntity
-import com.example.casosemestral.model.data.servicio.ServicioDao
-import com.example.casosemestral.model.data.servicio.ServicioEntity
-import com.example.casosemestral.model.data.servicio_proveedor.ServicioProveedorDao
-import com.example.casosemestral.model.data.servicio_proveedor.ServicioProveedorEntity
-import com.example.casosemestral.model.data.user.UserDao
-import com.example.casosemestral.model.data.user.UserEntity
-import com.example.casosemestral.model.data.venta.VentaDao
-import com.example.casosemestral.model.data.venta.VentaEntity
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import com.example.casosemestral.model.cliente.ClienteDao
+import com.example.casosemestral.model.cliente.ClienteEntity
+import com.example.casosemestral.model.proveedor.ProveedorDao
+import com.example.casosemestral.model.proveedor.ProveedorEntity
+import com.example.casosemestral.model.servicio.ServicioDao
+import com.example.casosemestral.model.servicio.ServicioEntity
+import com.example.casosemestral.model.servicio_proveedor.ServicioProveedorDao
+import com.example.casosemestral.model.servicio_proveedor.ServicioProveedorEntity
+import com.example.casosemestral.model.user.UserDao
+import com.example.casosemestral.model.user.UserEntity
+import com.example.casosemestral.model.venta.VentaDao
+import com.example.casosemestral.model.venta.VentaEntity
 
 // BASE DE DATOS DE LA APLICACION
 @Database(entities = [

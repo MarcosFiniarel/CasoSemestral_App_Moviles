@@ -1,9 +1,8 @@
-package com.example.casosemestral.model.data.servicio_proveedor
+package com.example.casosemestral.model.servicio_proveedor
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
-import com.example.casosemestral.model.data.servicio.ServicioEntity
 
 @Dao
 interface ServicioProveedorDao {

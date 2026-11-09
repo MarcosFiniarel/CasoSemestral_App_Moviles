@@ -1,6 +1,6 @@
 package com.example.casosemestral.ui.login
 
-import com.example.casosemestral.model.data.user.UserEntity
+import com.example.casosemestral.model.user.UserEntity
 
 // SEALED CLASS PARA CONTROLAR LOS ESTADOS DE VALIDACION DEL LOGIN
 sealed class LoginResult {

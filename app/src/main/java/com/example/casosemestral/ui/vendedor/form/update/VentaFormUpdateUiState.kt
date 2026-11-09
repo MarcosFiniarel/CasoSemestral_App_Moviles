@@ -1,6 +1,6 @@
 package com.example.casosemestral.ui.vendedor.form.update
 
-import com.example.casosemestral.model.data.venta.VentaEntity
+import com.example.casosemestral.model.venta.VentaEntity
 
 data class VentaFormUpdateUiState(
     val convenioNuevo: String = "",

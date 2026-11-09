@@ -5,14 +5,14 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.casosemestral.model.data.cliente.ClienteEntity
+import com.example.casosemestral.model.cliente.ClienteEntity
 import com.example.casosemestral.model.data.local.AppDatabase
-import com.example.casosemestral.model.data.proveedor.ProveedorEntity
+import com.example.casosemestral.model.proveedor.ProveedorEntity
 import com.example.casosemestral.model.data.repository.ClienteRepository
 import com.example.casosemestral.model.data.repository.ProveedorRepository
 import com.example.casosemestral.model.data.repository.ServicioRepository
 import com.example.casosemestral.model.data.repository.VentaRepository
-import com.example.casosemestral.model.data.servicio.ServicioEntity
+import com.example.casosemestral.model.servicio.ServicioEntity
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow

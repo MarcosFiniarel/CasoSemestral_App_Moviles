@@ -1,10 +1,10 @@
-package com.example.casosemestral.model.data.servicio_proveedor
+package com.example.casosemestral.model.servicio_proveedor
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
-import com.example.casosemestral.model.data.servicio.ServicioEntity
-import com.example.casosemestral.model.data.proveedor.ProveedorEntity
+import com.example.casosemestral.model.servicio.ServicioEntity
+import com.example.casosemestral.model.proveedor.ProveedorEntity
 
 @Entity(
     tableName = "servicio_proveedor",

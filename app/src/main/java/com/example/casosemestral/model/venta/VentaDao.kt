@@ -1,4 +1,4 @@
-package com.example.casosemestral.model.data.venta
+package com.example.casosemestral.model.venta
 
 import androidx.room.Dao
 import androidx.room.Delete
@@ -32,5 +32,13 @@ interface VentaDao {
     // FUNCION PARA TRAER LA LISTA DE TODAS LAS VENTAS QUE SE ENCUENTREN REGISTRADAS
     @Query("SELECT * FROM venta ORDER BY id DESC")
     fun obtenerVentas(): Flow<List<VentaEntity>>
+
+    // FUNCION PARA TRAER LA LISTA DE TODAS LAS VENTAS QUE SE ENCUENTREN REGISTRADAS
+    @Query("SELECT * FROM venta WHERE estado = 'Enviado' ORDER BY fecha_de_ultima_actualizacion DESC")
+    fun obtenerVentasEnviadas(): Flow<List<VentaEntity>>
+
+    // FUNCION PARA TRAER LA LISTA DE TODAS LAS VENTAS QUE SE ENCUENTREN REGISTRADAS
+    @Query("SELECT * FROM venta WHERE estado = 'Rechazada' || 'Aprobada' || 'Corregir' ORDER BY fecha_de_ultima_actualizacion DESC")
+    fun obtenerVentasAuditadas(): Flow<List<VentaEntity>>
 
 }

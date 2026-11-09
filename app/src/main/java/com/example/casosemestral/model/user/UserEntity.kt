@@ -1,4 +1,4 @@
-package com.example.casosemestral.model.data.user
+package com.example.casosemestral.model.user
 
 import androidx.room.Entity
 import androidx.room.Index

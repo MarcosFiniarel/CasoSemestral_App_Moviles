@@ -1,7 +1,7 @@
 package com.example.casosemestral.model.data.repository
 
 import com.example.casosemestral.ui.login.LoginResult
-import com.example.casosemestral.model.data.user.UserDao
+import com.example.casosemestral.model.user.UserDao
 
 class LoginRepository(
     private val userDao: UserDao

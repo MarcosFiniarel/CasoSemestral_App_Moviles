@@ -1,7 +1,7 @@
 package com.example.casosemestral.model.data.repository
 
-import com.example.casosemestral.model.data.cliente.ClienteDao
-import com.example.casosemestral.model.data.cliente.ClienteEntity
+import com.example.casosemestral.model.cliente.ClienteDao
+import com.example.casosemestral.model.cliente.ClienteEntity
 import kotlinx.coroutines.flow.Flow
 
 class ClienteRepository(

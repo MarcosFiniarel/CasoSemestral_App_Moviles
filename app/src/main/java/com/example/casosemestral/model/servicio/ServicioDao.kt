@@ -1,4 +1,4 @@
-package com.example.casosemestral.model.data.servicio
+package com.example.casosemestral.model.servicio
 
 import androidx.room.Dao
 import androidx.room.Delete

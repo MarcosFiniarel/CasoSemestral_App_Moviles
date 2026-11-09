@@ -1,4 +1,4 @@
-package com.example.casosemestral.model.data.venta
+package com.example.casosemestral.model.venta
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

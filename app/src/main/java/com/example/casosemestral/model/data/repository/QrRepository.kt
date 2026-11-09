@@ -1,6 +1,6 @@
 package com.example.casosemestral.model.data.repository
 
-import com.example.casosemestral.model.data.camera.QrResult
+import com.example.casosemestral.model.camera.QrResult
 
 class QrRepository {
     fun processQrContent(content: String): QrResult {

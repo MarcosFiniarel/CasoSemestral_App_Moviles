@@ -6,7 +6,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.example.casosemestral.model.data.local.AppDatabase
 import com.example.casosemestral.model.data.repository.VentaRepository
-import com.example.casosemestral.model.data.venta.VentaEntity
+import com.example.casosemestral.model.venta.VentaEntity
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn

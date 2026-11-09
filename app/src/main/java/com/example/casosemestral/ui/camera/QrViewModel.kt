@@ -3,7 +3,7 @@ package com.example.casosemestral.ui.camera
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.casosemestral.model.data.camera.QrResult
+import com.example.casosemestral.model.camera.QrResult
 import com.example.casosemestral.model.data.repository.QrRepository
 
 class QrViewModel : ViewModel() {
