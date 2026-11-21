@@ -4,11 +4,14 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Checklist
@@ -20,13 +23,17 @@ import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 
@@ -34,7 +41,8 @@ import androidx.navigation.NavController
 fun MenuScreen(
     navController: NavController,
     username: String,
-    mensajeExito: String? = null
+    mensajeExito: String? = null,
+    vm: MenuViewModel
 ){
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -44,6 +52,12 @@ fun MenuScreen(
             snackbarHostState.showSnackbar(texto)
         }
     }
+
+    LaunchedEffect(username) {
+        vm.setVendedor(username)
+    }
+
+    val cantidadNuevas by vm.cantidadNuevasVentas.collectAsState()
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -90,6 +104,46 @@ fun MenuScreen(
 
                 item {
                     NavigationDrawerItem(
+                        label = {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text("Listado de Ventas Registradas")
+                                if (cantidadNuevas > 0) {
+                                    Spacer(modifier = Modifier.width(8.dp))
+                                    Surface(
+                                        shape = CircleShape,
+                                        color = MaterialTheme.colorScheme.tertiaryContainer,
+                                        contentColor = MaterialTheme.colorScheme.onTertiaryContainer
+                                    ) {
+                                        Text(
+                                            text = if (cantidadNuevas > 99) "99+" else cantidadNuevas.toString(),
+                                            style = MaterialTheme.typography.labelSmall,
+                                            fontWeight = FontWeight.Bold,
+                                            modifier = Modifier.padding(horizontal = 7.dp, vertical = 2.dp)
+                                        )
+                                    }
+                                }
+                            }
+                        },
+                        selected = false,
+                        onClick = {
+                            navController.navigate("vendedor_lista_screen/$username") {
+                                popUpTo("vendedor_lista_screen/$username") { inclusive = true }
+                            }
+                        },
+                        icon = {
+                            Icon(
+                                Icons.Default.Checklist,
+                                contentDescription = "Listado de Ventas",
+                                tint = MaterialTheme.colorScheme.tertiary
+                            )
+                        }
+                    )
+                }
+/*
+                item {
+                    NavigationDrawerItem(
                         label = { Text("Listado de Ventas Registradas") },
                         selected = false,
                         onClick = {
@@ -106,6 +160,8 @@ fun MenuScreen(
                         }
                     )
                 }
+
+ */
 
                 item {
                     NavigationDrawerItem(

@@ -63,6 +63,16 @@ fun ListaVentasScreen(
         }
     }
 
+    LaunchedEffect(username) {
+        vm.setVendedor(username)
+    }
+
+    val idsExclamacion by vm.idsConExclamacion.collectAsState()
+
+    LaunchedEffect(listaVentas) {
+        vm.cargarMarcasNovedad(listaVentas)
+    }
+
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -104,6 +114,7 @@ fun ListaVentasScreen(
                     items(listaVentas, key = { venta -> venta.id }) { venta ->
                         VentaItemCard(
                             venta = venta,
+                            esNovedad = venta.id in idsExclamacion,
                             onVerDetalleClick = {
                                 navController.navigate("vendedor_detail_screen/$username/${venta.id}")
                             },
@@ -126,6 +137,8 @@ fun ListaVentasScreen(
             // BOTON PARA VOLVER AL MENU
             OutlinedButton(
                 onClick = {
+                    vm.marcarNovedadesVistas()
+                    vm.limpiarMarcasNovedad()
                     navController.navigate("vendedor_screen/$username") {
                         popUpTo("vendedor_screen/$username") { inclusive = true }
                     }

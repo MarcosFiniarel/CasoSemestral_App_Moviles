@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AllInbox
 import androidx.compose.material.icons.filled.Lock
@@ -35,7 +36,8 @@ import com.example.casosemestral.model.venta.VentaEntity
 fun VentaGestorItemCard(
     venta: VentaEntity,
     onAuditarClick: () -> Unit,
-    modo: String
+    modo: String,
+    esNovedad: Boolean = false
 ) {
     Card(
         modifier = Modifier
@@ -64,19 +66,42 @@ fun VentaGestorItemCard(
                     fontWeight = FontWeight.Bold
                 )
 
-                Surface(
-                    shape = MaterialTheme.shapes.small,
-                    color = if (venta.estado == "Enviado") MaterialTheme.colorScheme.primary.copy(alpha = 0.2f)
-                    else MaterialTheme.colorScheme.secondary.copy(alpha = 0.2f)
-                ) {
-                    Text(
-                        text = venta.estado,
-                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
-                        style = MaterialTheme.typography.labelMedium,
-                        color = if (venta.estado == "Enviado") MaterialTheme.colorScheme.primary
-                        else MaterialTheme.colorScheme.secondary
-                    )
+                Row {
+
+                    Surface(
+                        shape = MaterialTheme.shapes.small,
+                        color = if (venta.estado == "Enviado") MaterialTheme.colorScheme.primary.copy(
+                            alpha = 0.2f
+                        )
+                        else MaterialTheme.colorScheme.secondary.copy(alpha = 0.2f)
+                    ) {
+                        Text(
+                            text = venta.estado,
+                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+                            style = MaterialTheme.typography.labelMedium,
+                            color = if (venta.estado == "Enviado") MaterialTheme.colorScheme.primary
+                            else MaterialTheme.colorScheme.secondary
+                        )
+                    }
+
+                    if (esNovedad) {
+                        Spacer(modifier = Modifier.width(6.dp))
+                        Surface(
+                            shape = CircleShape,
+                            color = MaterialTheme.colorScheme.tertiaryContainer,
+                            contentColor = MaterialTheme.colorScheme.onTertiaryContainer
+                        ) {
+                            Text(
+                                text = "!",
+                                style = MaterialTheme.typography.labelSmall,
+                                fontWeight = FontWeight.Bold,
+                                modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
+                            )
+                        }
+                    }
+
                 }
+
             }
 
             // Datos clave de la venta

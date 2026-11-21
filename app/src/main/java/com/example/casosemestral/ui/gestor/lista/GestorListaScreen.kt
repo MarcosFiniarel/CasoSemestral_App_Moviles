@@ -19,6 +19,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -35,6 +36,12 @@ fun GestorListaScreen(
 ){
     // OBTENEMOS LA LISTA DE VENTAS HACIENDO USO DEL VIEWMODEL
     val listaVentas by vm.ventas.collectAsState()
+
+    val idsExclamacion by vm.idsConExclamacion.collectAsState()
+
+    LaunchedEffect(listaVentas) {
+        vm.cargarMarcasNovedad(listaVentas)
+    }
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -95,6 +102,7 @@ fun GestorListaScreen(
                     items(listaVentas, key = { venta -> venta.id }) { venta ->
                         VentaGestorItemCard(
                             venta = venta,
+                            esNovedad = venta.id in idsExclamacion,
                             onAuditarClick = {
                                 navController.navigate("gestor_detail_screen/$username/${venta.id}/$modo") {
                                     popUpTo("gestor_detail_screen/$username/${venta.id}/$modo") { inclusive = true }
@@ -109,6 +117,8 @@ fun GestorListaScreen(
             // BOTON PARA VOLVER AL MENU
             OutlinedButton(
                 onClick = {
+                    if (modo == "AUDITAR"){vm.marcarVistaGestor()}else{vm.marcarHistoricoVistoGestor()}
+                    vm.limpiarMarcasNovedad()
                     navController.navigate("gestor_screen/$username") {
                         popUpTo("gestor_screen/$username") { inclusive = true }
                     }

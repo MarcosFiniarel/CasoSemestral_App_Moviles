@@ -24,7 +24,10 @@ data class VentaEntity(
     val gestor: String? = null,
     val observaciones: String? = null,
     val motivo_rechazo: String? = null,
-    val fecha_de_ultima_actualizacion: String
+    val fecha_de_ultima_actualizacion: String,
+    val visto_gestor: Boolean = false,
+    val historico_visto_gestor: Boolean = false,
+    val visto_vendedor: Boolean = false
 ){
     // FUNCION PARA OBTENER LA FECHA DE SISTEMA PARA AUTOMATIZAR PARAMETROS COMO LA FECHA Y HORA DE LA VENTA O DE LAS ACTUALIZACIONES DE REGISTROS
     companion object{

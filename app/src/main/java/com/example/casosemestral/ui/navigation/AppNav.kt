@@ -13,7 +13,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -22,7 +21,8 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.casosemestral.ui.camera.QrScannerScreen
 import com.example.casosemestral.ui.camera.QrViewModel
-import com.example.casosemestral.ui.gestor.MenuGestroScreen
+import com.example.casosemestral.ui.gestor.MenuGestorScreen
+import com.example.casosemestral.ui.gestor.MenuGestorViewModel
 import com.example.casosemestral.ui.gestor.lista.GestorListaScreen
 import com.example.casosemestral.ui.gestor.lista.GestorListaViewModel
 import com.example.casosemestral.ui.gestor.lista.GestorVentaDetailScreen
@@ -31,6 +31,7 @@ import com.example.casosemestral.ui.gestor.lista.form.GestorFormViewModel
 import com.example.casosemestral.ui.login.LoginScreen
 import com.example.casosemestral.ui.login.LoginViewModel
 import com.example.casosemestral.ui.vendedor.MenuScreen
+import com.example.casosemestral.ui.vendedor.MenuViewModel
 import com.example.casosemestral.ui.vendedor.form.insert.VentaFormScreen
 import com.example.casosemestral.ui.vendedor.form.insert.VentaFormInsertViewModel
 import com.example.casosemestral.ui.vendedor.form.update.VentaFormUpdateScreen
@@ -73,7 +74,8 @@ fun AppNav(){
                 backStackEntry ->
             val username = backStackEntry.arguments?.getString("username").orEmpty()
             val mensaje = backStackEntry.arguments?.getString("mensaje")
-            MenuScreen(navController,username,mensaje)
+            val menuViewModel: MenuViewModel = viewModel()
+            MenuScreen(navController,username,mensaje, menuViewModel)
         }
 
         // RUTA AL FORM DE REGISTRO DE VENTAS DEL VENDEDOR
@@ -160,7 +162,8 @@ fun AppNav(){
             )
         ) { backStackEntry ->
             val username = backStackEntry.arguments?.getString("username").orEmpty()
-            MenuGestroScreen(navController,username)
+            val menuViewModel: MenuGestorViewModel = viewModel()
+            MenuGestorScreen(navController,username,menuViewModel)
         }
 
         // RUTA A LA LISTA DEL GESTOR, DIFERENCIA SI AUDITORIA O HISTORICO A TRAVES DEL MODO

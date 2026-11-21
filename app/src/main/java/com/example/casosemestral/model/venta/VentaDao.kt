@@ -44,4 +44,52 @@ interface VentaDao {
     // FUNCION PARA CONTAR CUANTAS VECES APARECE UN CODIGO DE AUTORIZACION
     @Query("SELECT COUNT(*) FROM venta WHERE codigo_autorizacion = :codigo")
     suspend fun contarCodigo(codigo: String): Int
+
+    // Contador para la burbuja del Gestor (ventas enviadas aún no vistas por gestor)
+    @Query("SELECT COUNT(*) FROM venta WHERE estado = 'Enviado' AND visto_gestor = 0")
+    fun contarNuevasParaGestor(): Flow<Int>
+
+    // Contador para la burbuja del Vendedor (ventas ya auditadas aún no vistas por vendedor)
+    @Query(
+        """
+                SELECT COUNT(*) FROM venta 
+                WHERE vendedor_responsable = :nombreVendedor 
+                AND estado IN ('Aprobada', 'Rechazada', 'Corregir') 
+                AND visto_vendedor = 0
+                """
+    )
+    fun contarNovedadesParaVendedor(nombreVendedor: String): Flow<Int>
+
+    // Marcar como vistas por el gestor todas las ventas enviadas
+    @Query("UPDATE venta SET visto_gestor = 1 WHERE estado = 'Enviado' AND visto_gestor = 0")
+    suspend fun marcarVistasPorGestor()
+
+    // Marcar como vistas por el vendedor sus ventas auditadas
+    @Query(
+        """
+                UPDATE venta SET visto_vendedor = 1 
+                WHERE vendedor_responsable = :nombreVendedor 
+                    AND estado IN ('Aprobada', 'Rechazada', 'Corregir') 
+                    AND visto_vendedor = 0
+                """
+    )
+    suspend fun marcarVistasPorVendedor(nombreVendedor: String)
+
+    @Query(
+        """
+    SELECT COUNT(*) FROM venta 
+    WHERE estado IN ('Aprobada', 'Rechazada', 'Corregir') 
+      AND historico_visto_gestor = 0
+    """
+    )
+    fun contarHistoricoNuevoParaGestor(): Flow<Int>
+
+    @Query(
+        """
+    UPDATE venta SET historico_visto_gestor = 1 
+    WHERE estado IN ('Aprobada', 'Rechazada', 'Corregir') 
+      AND historico_visto_gestor = 0
+    """
+    )
+    suspend fun marcarHistoricoVistoPorGestor()
 }

@@ -34,7 +34,9 @@ class VentaRepository (
             respaldo_fotografico = respaldoFoto,
             estado = estado,
             fecha_de_ultima_actualizacion = fechaActual,
-            fecha_envio = fechaEnvio
+            fecha_envio = fechaEnvio,
+            visto_vendedor = true,
+            visto_gestor = estado != "Enviado"
         )
 
         // SE HACE USO DEL METODO DE INSERCION CONTRUIDO EN EL DAO DE VENTAS
@@ -58,7 +60,9 @@ class VentaRepository (
             monto = montoNuevo,
             respaldo_fotografico = respaldoNuevo,
             estado = estadoNuevo,
-            fecha_envio = fechaEnvioNuevo
+            fecha_envio = fechaEnvioNuevo,
+            visto_vendedor = true,
+            visto_gestor = estadoNuevo != "Enviado"
         )
 
         ventaDao.actualizar(ventaActualizada)
@@ -80,7 +84,9 @@ class VentaRepository (
             observaciones = observacion,
             motivo_rechazo = motivoRechazo,
             codigo_autorizacion = codigoAutorizacion,
-            estado = estadoVenta
+            estado = estadoVenta,
+            visto_vendedor = false,
+            visto_gestor = true
         )
 
         ventaDao.actualizar(ventaActualizada)
@@ -114,6 +120,30 @@ class VentaRepository (
     // FUNCION PARA CONTAR LAS APARICIONES DE UN CODIGO EN LA BD
     suspend fun contarCodigo(codigo: String): Int{
         return ventaDao.contarCodigo(codigo)
+    }
+
+    fun contarNuevasGestor(): Flow<Int>{
+        return ventaDao.contarNuevasParaGestor()
+    }
+
+    fun contarNovedadesParaVendedor(vendedor: String): Flow<Int>{
+        return ventaDao.contarNovedadesParaVendedor(vendedor)
+    }
+
+    suspend fun marcarVistasPorGestor(){
+        ventaDao.marcarVistasPorGestor()
+    }
+
+    suspend fun marcarVistasPorVendedor(vendedor: String){
+        ventaDao.marcarVistasPorVendedor(vendedor)
+    }
+
+    fun contarHistoricoNuevoParaGestor(): Flow<Int>{
+        return ventaDao.contarHistoricoNuevoParaGestor()
+    }
+
+    suspend fun marcarHistoricoVistoPorGestor(){
+        ventaDao.marcarHistoricoVistoPorGestor()
     }
 
 }

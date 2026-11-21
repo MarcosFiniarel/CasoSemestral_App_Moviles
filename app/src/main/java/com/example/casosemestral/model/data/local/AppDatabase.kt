@@ -26,7 +26,7 @@ import com.example.casosemestral.model.venta.VentaEntity
     ServicioEntity::class,
     ProveedorEntity::class,
     ServicioProveedorEntity::class
-                     ], version = 6)
+                     ], version = 8)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun ventaDao(): VentaDao
@@ -78,7 +78,7 @@ abstract class AppDatabase : RoomDatabase() {
 
                 db.execSQL("""
                     INSERT INTO user (nombre, clave, perfil, zonaSucursal, estadoCuenta, fechaCreacion, fechaActualizacion) 
-                    VALUES ('Boris', '54321', 'Gestor', 'Puente Alto', 0, '$fechaActual', '$fechaActual')
+                    VALUES ('Boris', '54321', 'Gestor', 'Puente Alto', 1, '$fechaActual', '$fechaActual')
                 """)
 
                 // PRECARGA DE CLIENTES
