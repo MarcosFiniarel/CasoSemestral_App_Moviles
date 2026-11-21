@@ -9,6 +9,9 @@ import com.example.casosemestral.model.cliente.ClienteDao
 import com.example.casosemestral.model.cliente.ClienteEntity
 import com.example.casosemestral.model.proveedor.ProveedorDao
 import com.example.casosemestral.model.proveedor.ProveedorEntity
+import com.example.casosemestral.model.reporteDeComisiones.ReporteComisionDao
+import com.example.casosemestral.model.reporteDeComisiones.ReporteComisionDetalleEntity
+import com.example.casosemestral.model.reporteDeComisiones.ReporteComisionEntity
 import com.example.casosemestral.model.servicio.ServicioDao
 import com.example.casosemestral.model.servicio.ServicioEntity
 import com.example.casosemestral.model.servicio_proveedor.ServicioProveedorDao
@@ -25,8 +28,10 @@ import com.example.casosemestral.model.venta.VentaEntity
     ClienteEntity::class,
     ServicioEntity::class,
     ProveedorEntity::class,
-    ServicioProveedorEntity::class
-                     ], version = 8)
+    ServicioProveedorEntity::class,
+    ReporteComisionEntity::class,
+    ReporteComisionDetalleEntity::class
+                     ], version = 9)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun ventaDao(): VentaDao
@@ -35,6 +40,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun servicioDao(): ServicioDao
     abstract fun proveedorDao(): ProveedorDao
     abstract fun servicioProveedorDao(): ServicioProveedorDao
+    abstract fun reporteComisionDao(): ReporteComisionDao
 
     companion object {
         @Volatile

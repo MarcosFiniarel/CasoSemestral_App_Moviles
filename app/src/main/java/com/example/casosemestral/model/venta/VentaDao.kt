@@ -92,4 +92,23 @@ interface VentaDao {
     """
     )
     suspend fun marcarHistoricoVistoPorGestor()
+
+    // Ventas aprobadas aún no contabilizadas en comisión para un vendedor
+    @Query(
+        """
+    SELECT * FROM venta
+    WHERE vendedor_responsable = :nombreVendedor
+      AND estado = 'Aprobada'
+      AND contadoEnComision = 0
+    ORDER BY fecha_y_hora ASC, id ASC
+    """
+    )
+    suspend fun obtenerVentasAprobadasNoComisionadas(nombreVendedor: String): List<VentaEntity>
+
+    // Marcar un conjunto de IDs de ventas como ya contabilizadas en comisión
+    @Query("UPDATE venta SET contadoEnComision = 1 WHERE id IN (:ventaIds)")
+    suspend fun marcarVentasComoComisionadas(ventaIds: List<Long>)
+
+    @Query("SELECT DISTINCT vendedor_responsable FROM venta WHERE vendedor_responsable != '' ORDER BY vendedor_responsable ASC")
+    fun obtenerVendedoresRegistrados(): Flow<List<String>>
 }

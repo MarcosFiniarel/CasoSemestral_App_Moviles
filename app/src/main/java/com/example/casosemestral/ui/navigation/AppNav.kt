@@ -23,6 +23,8 @@ import com.example.casosemestral.ui.camera.QrScannerScreen
 import com.example.casosemestral.ui.camera.QrViewModel
 import com.example.casosemestral.ui.gestor.MenuGestorScreen
 import com.example.casosemestral.ui.gestor.MenuGestorViewModel
+import com.example.casosemestral.ui.gestor.comisiones.ComisionScreen
+import com.example.casosemestral.ui.gestor.comisiones.ComisionViewModel
 import com.example.casosemestral.ui.gestor.lista.GestorListaScreen
 import com.example.casosemestral.ui.gestor.lista.GestorListaViewModel
 import com.example.casosemestral.ui.gestor.lista.GestorVentaDetailScreen
@@ -226,6 +228,24 @@ fun AppNav(){
                 ventaId = ventaId,
                 username = username,
                 modo = modo
+            )
+        }
+
+        // RUTA A LA PANTALLA DE COMISIONES
+        composable(
+            route = "gestor_comisiones_screen/{username}/{modo}",
+            arguments = listOf(
+                navArgument("username") { type = NavType.StringType },
+                navArgument("modo") { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            val username = backStackEntry.arguments?.getString("username") ?: ""
+            val comisionViewModel: ComisionViewModel = viewModel()
+
+            ComisionScreen(
+                navController = navController,
+                vm = comisionViewModel,
+                username = username
             )
         }
 

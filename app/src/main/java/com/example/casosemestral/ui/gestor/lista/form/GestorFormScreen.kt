@@ -128,7 +128,7 @@ fun GestorFormScreen(
                             onValueChange = { vmF.onObservacionChange(it) },
                             label = {
                                 Text(
-                                    if (modo in listOf("CORREGIR","APROBAR")) "Observaciones (Obligatorio)"
+                                    if (modo == "CORREGIR") "Observaciones (Obligatorio)"
                                     else "Observaciones (Opcional)"
                                 )
                             },

@@ -15,6 +15,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AllInbox
 import androidx.compose.material.icons.filled.DoorBack
+import androidx.compose.material.icons.filled.LibraryBooks
 import androidx.compose.material.icons.filled.LockClock
 import androidx.compose.material.icons.filled.MonetizationOn
 import androidx.compose.material.icons.filled.RemoveRedEye
@@ -154,13 +155,32 @@ fun MenuGestorScreen(
                         label = { Text("Calculo de comisiones") },
                         selected = false,
                         onClick = {
-                            //navController.navigate("vendedor_lista_screen/$username") {
-                            //    popUpTo("vendedor_lista_screen/$username") { inclusive = true }
-                            //}
+                            navController.navigate("gestor_comisiones_screen/$username/REPORTE") {
+                                popUpTo("gestor_comisiones_screen/$username/REPORTE") { inclusive = true }
+                            }
                         },
                         icon = {
                             Icon(
                                 Icons.Default.MonetizationOn,
+                                contentDescription = "Calculo de Comisiones",
+                                tint = MaterialTheme.colorScheme.tertiary
+                            )
+                        }
+                    )
+                }
+
+                item {
+                    NavigationDrawerItem(
+                        label = { Text("Historico de Comisiones") },
+                        selected = false,
+                        onClick = {
+                            navController.navigate("gestor_comisiones_screen/$username/HISTORICO") {
+                                popUpTo("gestor_comisiones_screen/$username/HISTORICO") { inclusive = true }
+                            }
+                        },
+                        icon = {
+                            Icon(
+                                Icons.Default.LibraryBooks,
                                 contentDescription = "Calculo de Comisiones",
                                 tint = MaterialTheme.colorScheme.tertiary
                             )
