@@ -26,6 +26,8 @@ import com.example.casosemestral.ui.gestor.MenuGestroScreen
 import com.example.casosemestral.ui.gestor.lista.GestorListaScreen
 import com.example.casosemestral.ui.gestor.lista.GestorListaViewModel
 import com.example.casosemestral.ui.gestor.lista.GestorVentaDetailScreen
+import com.example.casosemestral.ui.gestor.lista.form.GestorFormScreen
+import com.example.casosemestral.ui.gestor.lista.form.GestorFormViewModel
 import com.example.casosemestral.ui.login.LoginScreen
 import com.example.casosemestral.ui.login.LoginViewModel
 import com.example.casosemestral.ui.vendedor.MenuScreen
@@ -195,6 +197,29 @@ fun AppNav(){
             GestorVentaDetailScreen(
                 navController = navController,
                 vm = gestorListViewModel,
+                ventaId = ventaId,
+                username = username,
+                modo = modo
+            )
+        }
+
+        // RUTA AL FORM DE CONFIRMACION DE AUDITORIA
+        composable(
+            route = "gestor_form_screen/{username}/{ventaId}/{modo}",
+            arguments = listOf(
+                navArgument(name = "username") { type = NavType.StringType },
+                navArgument(name = "ventaId") { type = NavType.LongType },
+                navArgument(name = "modo") { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            val username = backStackEntry.arguments?.getString("username").orEmpty()
+            val ventaId = backStackEntry.arguments?.getLong("ventaId") ?: 0L
+            val gestorFormViewModel: GestorFormViewModel = viewModel()
+            val modo = backStackEntry.arguments?.getString("modo").orEmpty()
+
+            GestorFormScreen(
+                navController = navController,
+                vmF = gestorFormViewModel,
                 ventaId = ventaId,
                 username = username,
                 modo = modo

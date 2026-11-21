@@ -19,7 +19,6 @@ import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.PendingActions
-import androidx.compose.material.icons.filled.Update
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -159,7 +158,9 @@ fun GestorVentaDetailScreen(
                         if (venta.estado == "Enviado") {
                             Button(
                                 onClick = {
-                                    // pendiente
+                                    navController.navigate("gestor_form_screen/$username/$ventaId/APROBAR") {
+                                        popUpTo("gestor_form_screen/$username/$ventaId/APROBAR") { inclusive = true }
+                                    }
                                 }
                             ) {
                                 Icon(Icons.Default.CheckCircle, contentDescription = null)
@@ -169,7 +170,9 @@ fun GestorVentaDetailScreen(
 
                             Button(
                                 onClick = {
-                                    // pendiente
+                                    navController.navigate("gestor_form_screen/$username/$ventaId/RECHAZO") {
+                                        popUpTo("gestor_form_screen/$username/$ventaId/RECHAZO") { inclusive = true }
+                                    }
                                 },
                                 colors = ButtonDefaults.buttonColors(
                                     containerColor = MaterialTheme.colorScheme.error
@@ -182,7 +185,9 @@ fun GestorVentaDetailScreen(
 
                             Button(
                                 onClick = {
-                                    // pendiente
+                                    navController.navigate("gestor_form_screen/$username/$ventaId/CORREGIR") {
+                                        popUpTo("gestor_form_screen/$username/$ventaId/CORREGIR") { inclusive = true }
+                                    }
                                 }
                             ) {
                                 Icon(Icons.Default.PendingActions, contentDescription = null)

@@ -96,7 +96,7 @@ fun VentaItemCard(
                     Text("Ver Detalle")
                 }
 
-                if (venta.estado in listOf("Borrador", "Enviado")) {
+                if (venta.estado in listOf("Borrador", "Enviado","Corregir")) {
                     TextButton(onClick = onActualizarClick) {
                         Icon(Icons.Default.Update, contentDescription = null, modifier = Modifier.size(18.dp))
                         Spacer(modifier = Modifier.width(4.dp).padding(horizontal = 3.dp))

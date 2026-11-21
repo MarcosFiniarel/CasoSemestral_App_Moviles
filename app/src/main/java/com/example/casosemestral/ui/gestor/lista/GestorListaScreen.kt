@@ -47,13 +47,23 @@ fun GestorListaScreen(
                     .height(120.dp)
                     .background(color = MaterialTheme.colorScheme.primary)
             ) {
-                Text(
-                    text = "Auditoria de $username",
-                    style = MaterialTheme.typography.headlineMedium,
-                    color = MaterialTheme.colorScheme.onPrimary,
-                    modifier = Modifier.align(Alignment.BottomStart)
-                        .padding(horizontal = 5.dp, vertical = 3.dp)
-                )
+                if (modo == "AUDITAR") {
+                    Text(
+                        text = "Auditoria de $username",
+                        style = MaterialTheme.typography.headlineMedium,
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        modifier = Modifier.align(Alignment.BottomStart)
+                            .padding(horizontal = 5.dp, vertical = 3.dp)
+                    )
+                } else {
+                    Text(
+                        text = "Historico de $username",
+                        style = MaterialTheme.typography.headlineMedium,
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        modifier = Modifier.align(Alignment.BottomStart)
+                            .padding(horizontal = 5.dp, vertical = 3.dp)
+                    )
+                }
             }
 
             if (listaVentas.isEmpty()) {
@@ -92,7 +102,6 @@ fun GestorListaScreen(
                             },
                             modo = modo
                         )
-
                     }
                 }
             }

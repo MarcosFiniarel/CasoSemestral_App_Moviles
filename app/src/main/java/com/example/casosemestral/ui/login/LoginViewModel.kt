@@ -37,12 +37,6 @@ class LoginViewModel (app: Application): AndroidViewModel(app){
         }
     }
 
-    fun onEsGestorChange(value: Boolean){
-        _estado.update {
-            it.copy(esGestor = value)
-        }
-    }
-
     // FUNCIÓN DE VALIDACIÓN LOCAL DEL FORMULARIO
     private fun validarForm(): Boolean {
         val actual = _estado.value

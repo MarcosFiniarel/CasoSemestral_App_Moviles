@@ -38,7 +38,10 @@ interface VentaDao {
     fun obtenerVentasEnviadas(): Flow<List<VentaEntity>>
 
     // FUNCION PARA TRAER LA LISTA DE TODAS LAS VENTAS QUE SE ENCUENTREN REGISTRADAS
-    @Query("SELECT * FROM venta WHERE estado = 'Rechazada' || 'Aprobada' || 'Corregir' ORDER BY fecha_de_ultima_actualizacion DESC")
+    @Query("SELECT * FROM venta WHERE estado IN ('Rechazada','Aprobada','Corregir') ORDER BY fecha_de_ultima_actualizacion DESC")
     fun obtenerVentasAuditadas(): Flow<List<VentaEntity>>
 
+    // FUNCION PARA CONTAR CUANTAS VECES APARECE UN CODIGO DE AUTORIZACION
+    @Query("SELECT COUNT(*) FROM venta WHERE codigo_autorizacion = :codigo")
+    suspend fun contarCodigo(codigo: String): Int
 }

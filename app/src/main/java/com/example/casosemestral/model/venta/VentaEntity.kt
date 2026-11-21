@@ -16,7 +16,7 @@ data class VentaEntity(
     val convenio_o_servicio: String,
     val prestador_asociado: String,
     val monto: Double,
-    val codigo_autorizacion: Long? = null,
+    val codigo_autorizacion: String? = null,
     val respaldo_fotografico: String,
     val estado: String = "Borrador",
     val fecha_envio: String,

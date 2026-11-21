@@ -91,7 +91,16 @@ class VentaFormUpdateViewModel (
         viewModelScope.launch {
             ventaOriginal = repo.obtenerVentaPorId(ventaId)
             ventaOriginal?.let { venta ->
-                _estado.value = VentaFormUpdateUiState(venta)
+                // Creamos el estado inicial basado en la venta
+                val estadoInicial = VentaFormUpdateUiState(venta)
+
+                // Si la venta vino con estado "Corregir", forzamos que el formulario
+                // inicie con "Enviado" para que el vendedor la devuelva a revisión automáticamente.
+                _estado.value = if (venta.estado == "Corregir") {
+                    estadoInicial.copy(estadoNuevo = "Enviado")
+                } else {
+                    estadoInicial
+                }
             }
         }
     }

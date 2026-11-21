@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -17,6 +18,10 @@ import androidx.compose.material.icons.filled.Key
 import androidx.compose.material.icons.filled.KeyOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -41,6 +46,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(
     navController: NavController,
@@ -119,41 +125,75 @@ fun LoginScreen(
                     modifier = Modifier.fillMaxWidth()
                 )
 
-                // SWITCH PARA SELECCIONAR EL PERFIL (Vendedor / Gestor)
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
+                // Dentro de tu LoginScreen (junto a tus otros estados de UI)
+                var rolSeleccionado by remember { mutableStateOf("Vendedor") }
+                val roles = listOf("Vendedor", "Gestor", "Administrador")
+                var expanded by remember { mutableStateOf(false) }
+
+                // CAMPO ROL CON MENÚ DESPLEGABLE (Exposed Dropdown Menu)
+                ExposedDropdownMenuBox(
+                    expanded = expanded,
+                    onExpandedChange = { expanded = !expanded },
+                    modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text(
-                        text = if (estado.esGestor) "Perfil: Gestor" else "Perfil: Vendedor",
-                        style = MaterialTheme.typography.bodyLarge
+                    OutlinedTextField(
+                        modifier = Modifier
+                            .menuAnchor()
+                            .fillMaxWidth(),
+                        value = rolSeleccionado,
+                        onValueChange = {},
+                        readOnly = true,
+                        label = { Text("Rol") },
+                        trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+                        colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors()
                     )
-                    Switch(
-                        checked = estado.esGestor,
-                        onCheckedChange = { vm.onEsGestorChange(it) }
-                    )
+
+                    ExposedDropdownMenu(
+                        expanded = expanded,
+                        onDismissRequest = { expanded = false }
+                    ) {
+                        roles.forEach { selectionOption ->
+                            DropdownMenuItem(
+                                text = { Text(selectionOption) },
+                                onClick = {
+                                    rolSeleccionado = selectionOption
+                                    expanded = false
+                                }
+                            )
+                        }
+                    }
                 }
+
+                Spacer(modifier = Modifier.padding(vertical = 12.dp))
 
                 // BOTÓN DE INICIO DE SESIÓN
                 Button(
                     onClick = {
 
-                        val perfilSeleccionado = if (estado.esGestor) "Gestor" else "Vendedor"
+                        val perfilSeleccionado = rolSeleccionado
 
                         vm.autenticar(
                             perfilSeleccionado = perfilSeleccionado,
                             onExito = { username ->
 
-                                if (estado.esGestor) {
-                                    navController.navigate("gestor_screen/$username") {
-                                        popUpTo("login_screen") { inclusive = true }
+                                when(perfilSeleccionado){
+                                    "Vendedor" -> {
+                                        navController.navigate("vendedor_screen/$username") {
+                                            popUpTo("login_screen") { inclusive = true }
+                                        }
                                     }
-                                } else {
-                                    navController.navigate("vendedor_screen/$username") {
-                                        popUpTo("login_screen") { inclusive = true }
+                                    "Gestor" -> {
+                                        navController.navigate("gestor_screen/$username") {
+                                            popUpTo("login_screen") { inclusive = true }
+                                        }
+                                    }
+                                    "Administrador" -> {
+                                        navController.navigate("vendedor_screen/$username") {
+                                            popUpTo("login_screen") { inclusive = true }
+                                        }
                                     }
                                 }
+
                             },
                             onError = { mensajeError ->
                                 scope.launch {
@@ -171,7 +211,18 @@ fun LoginScreen(
                             color = MaterialTheme.colorScheme.onPrimary
                         )
                     } else {
-                        Text(if (estado.esGestor) "Entrar como Gestor" else "Entrar como Vendedor")
+                        Text(when(rolSeleccionado){
+                            "Vendedor" -> {
+                                "Entrar como vendedor"
+                            }
+                            "Gestor" -> {
+                                "Entrar como gestor"
+                            }
+                            "Administrador" -> {
+                                "Entrar como administrador"
+                            }
+                            else -> {""}
+                        })
                     }
                 }
             }

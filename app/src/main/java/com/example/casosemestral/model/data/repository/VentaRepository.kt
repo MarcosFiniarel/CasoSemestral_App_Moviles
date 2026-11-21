@@ -64,6 +64,28 @@ class VentaRepository (
         ventaDao.actualizar(ventaActualizada)
     }
 
+    // FUNCION PARA ACTUALIZAR LAS VENTAS EN LA BD POR EL GESTOR
+    suspend fun actualizarVentaGestor(
+        gestor: String,
+        venta: VentaEntity,
+        observacion: String,
+        motivoRechazo: String,
+        codigoAutorizacion: String,
+        estadoVenta: String
+    ){
+        val ventaActualizada = venta.copy(
+            fecha_de_ultima_actualizacion = VentaEntity.obtenerFechaActual(),
+            fecha_revision = VentaEntity.obtenerFechaActual(),
+            gestor = gestor,
+            observaciones = observacion,
+            motivo_rechazo = motivoRechazo,
+            codigo_autorizacion = codigoAutorizacion,
+            estado = estadoVenta
+        )
+
+        ventaDao.actualizar(ventaActualizada)
+    }
+
     // FUNCION PARA BORRAR LAS VENTAS EN LA BD
     suspend fun eliminarVenta(venta: VentaEntity){
         ventaDao.borrar(venta)
@@ -88,4 +110,10 @@ class VentaRepository (
     fun obtenerVentasAuditadas(): Flow<List<VentaEntity>>{
         return  ventaDao.obtenerVentasAuditadas()
     }
+
+    // FUNCION PARA CONTAR LAS APARICIONES DE UN CODIGO EN LA BD
+    suspend fun contarCodigo(codigo: String): Int{
+        return ventaDao.contarCodigo(codigo)
+    }
+
 }

@@ -128,7 +128,7 @@ fun VentaDetailScreen(
                         horizontalArrangement = Arrangement.SpaceEvenly,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        if (venta.estado in listOf("Borrador", "Enviado")) {
+                        if (venta.estado in listOf("Borrador", "Enviado","Corregir")) {
                             Button(
                                 onClick = {
                                     navController.navigate("vendedor_update_screen/$username/${venta.id}")
