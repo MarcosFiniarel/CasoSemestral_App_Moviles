@@ -188,8 +188,8 @@ fun LoginScreen(
                                         }
                                     }
                                     "Administrador" -> {
-                                        navController.navigate("vendedor_screen/$username") {
-                                            popUpTo("login_screen") { inclusive = true }
+                                        navController.navigate("administrador_screen/$username") {
+                                            popUpTo("administrador_screen") { inclusive = true }
                                         }
                                     }
                                 }

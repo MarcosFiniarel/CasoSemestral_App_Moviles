@@ -19,6 +19,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.casosemestral.ui.administrador.MenuAdministradorScreen
+import com.example.casosemestral.ui.administrador.usuarioHabilitado.PanelDeUsuarioScreen
+import com.example.casosemestral.ui.administrador.usuarioHabilitado.PanelDeUsuarioViewModel
 import com.example.casosemestral.ui.camera.QrScannerScreen
 import com.example.casosemestral.ui.camera.QrViewModel
 import com.example.casosemestral.ui.gestor.MenuGestorScreen
@@ -247,6 +250,32 @@ fun AppNav(){
                 vm = comisionViewModel,
                 username = username
             )
+        }
+
+        // RUTA A LA PANTALLA DEL ADMINISTRADOR
+        composable(route = "administrador_screen/{username}",
+            arguments = listOf(
+                navArgument(name = "username"){
+                    type = NavType.StringType
+                }
+            )
+        ) { backStackEntry ->
+            val username = backStackEntry.arguments?.getString("username").orEmpty()
+            MenuAdministradorScreen(navController,username)
+        }
+
+        // RUTA A LA PANTALLA DEL ADMINISTRADOR
+        composable(route = "panel_de_usuarios_screen/{username}",
+            arguments = listOf(
+                navArgument(name = "username"){
+                    type = NavType.StringType
+                }
+            )
+        ) { backStackEntry ->
+            val username = backStackEntry.arguments?.getString("username").orEmpty()
+            val panelDeUsuarioViewModel: PanelDeUsuarioViewModel = viewModel()
+
+            PanelDeUsuarioScreen(navController,panelDeUsuarioViewModel,username)
         }
 
         // RUTA PARA EL ESCANER QR

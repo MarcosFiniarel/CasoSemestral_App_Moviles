@@ -87,6 +87,16 @@ abstract class AppDatabase : RoomDatabase() {
                     VALUES ('Boris', '54321', 'Gestor', 'Puente Alto', 1, '$fechaActual', '$fechaActual')
                 """)
 
+                db.execSQL("""
+                    INSERT INTO user (nombre, clave, perfil, zonaSucursal, estadoCuenta, fechaCreacion, fechaActualizacion) 
+                    VALUES ('Marcos', '12345', 'Administrador', 'Puente Alto', 1, '$fechaActual', '$fechaActual')
+                """)
+
+                db.execSQL("""
+                    INSERT INTO user (nombre, clave, perfil, zonaSucursal, estadoCuenta, fechaCreacion, fechaActualizacion) 
+                    VALUES ('Boris', '54321', 'Administrador', 'Puente Alto', 1, '$fechaActual', '$fechaActual')
+                """)
+
                 // PRECARGA DE CLIENTES
                 db.execSQL("""
                     INSERT INTO cliente (nombre, identificadorTributario, correo, telefono, nombreMascosta, consentimiento) 
