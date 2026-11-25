@@ -8,6 +8,9 @@
     <!-- Declara la cámara solo una vez -->
     <uses-feature android:name="android.hardware.camera" android:required="false"/>
 
+    <!-- Permisos necesarios para navegar por internet -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"

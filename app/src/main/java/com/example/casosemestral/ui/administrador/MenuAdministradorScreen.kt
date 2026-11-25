@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Badge
 import androidx.compose.material.icons.filled.DoorBack
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Icon
@@ -49,6 +50,25 @@ fun MenuAdministradorScreen(
             }
 
             LazyColumn(modifier = Modifier.weight(1f).padding(vertical = 8.dp)) {
+
+                item {
+                    NavigationDrawerItem(
+                        label = { Text("Panel de admins") },
+                        selected = false,
+                        onClick = {
+                            navController.navigate("panel_de_admin_screen/$username") {
+                                popUpTo("panel_de_admin_screen/$username") { inclusive = true }
+                            }
+                        },
+                        icon = {
+                            Icon(
+                                Icons.Default.Badge,
+                                contentDescription = "Panel de admins",
+                                tint = MaterialTheme.colorScheme.tertiary
+                            )
+                        }
+                    )
+                }
 
                 item {
                     NavigationDrawerItem(
