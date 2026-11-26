@@ -31,7 +31,7 @@ import com.example.casosemestral.model.venta.VentaEntity
     ServicioProveedorEntity::class,
     ReporteComisionEntity::class,
     ReporteComisionDetalleEntity::class
-                     ], version = 9)
+                     ], version = 10)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun ventaDao(): VentaDao

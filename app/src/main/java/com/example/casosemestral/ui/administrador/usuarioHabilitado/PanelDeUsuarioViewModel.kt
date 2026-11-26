@@ -14,9 +14,16 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-class PanelDeUsuarioViewModel(app: Application): AndroidViewModel(app){
-    private val repo = UserRepository(
-        userDao = AppDatabase.getDatabase(app).userDao()
+class PanelDeUsuarioViewModel internal constructor(
+    app: Application,
+    private val repo: UserRepository
+) : AndroidViewModel(app) {
+
+    constructor(app: Application) : this(
+        app = app,
+        repo = UserRepository(
+            userDao = AppDatabase.getDatabase(app).userDao()
+        )
     )
 
     val usuarios: StateFlow<List<UserEntity>> = repo.listarUsuarios()

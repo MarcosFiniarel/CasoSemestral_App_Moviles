@@ -8,9 +8,13 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class SucursalAdminViewModel : ViewModel() {
+class SucursalAdminViewModel internal constructor(
+    private val repository: SucursalAdminRepository
+) : ViewModel() {
 
-    private val repository = SucursalAdminRepository()
+    constructor() : this(
+        repository = SucursalAdminRepository()
+    )
 
     private val _adminList = MutableStateFlow<List<SucursalAdmin>>(emptyList())
     val adminList: StateFlow<List<SucursalAdmin>> = _adminList
