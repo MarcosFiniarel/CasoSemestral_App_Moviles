@@ -125,7 +125,6 @@ fun LoginScreen(
                     modifier = Modifier.fillMaxWidth()
                 )
 
-                // Dentro de tu LoginScreen (junto a tus otros estados de UI)
                 var rolSeleccionado by remember { mutableStateOf("Vendedor") }
                 val roles = listOf("Vendedor", "Gestor", "Administrador")
                 var expanded by remember { mutableStateOf(false) }

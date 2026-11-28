@@ -45,12 +45,12 @@ fun GestorFormScreen(
     val venta by vmF.venta.collectAsState()
     val estado by vmF.estado.collectAsState()
 
-    // Disparamos la carga de la venta al iniciar la pantalla
+    // SE DISPARA LA CARGA DE VENTAS AL INICIAR LA PANTALLA
     LaunchedEffect(ventaId) {
         vmF.cargarVenta(ventaId)
     }
 
-    // Textos dinámicos según el modo
+    // TEXTO DINAMICO SEGUN EL MODO
     val tituloCabecera = when (modo) {
         "APROBAR" -> "Aprobar Venta #${ventaId}"
         "RECHAZO" -> "Rechazar Venta #${ventaId}"
@@ -122,7 +122,7 @@ fun GestorFormScreen(
                             style = MaterialTheme.typography.titleMedium
                         )
 
-                        // Campo de Observaciones: Se muestra en APROBAR (opcional) y CORREGIR (obligatorio)
+                        // CAMPO DE OBSERVACIONES: SE MUESTRA EN APROBAR Y RECHAZAR (OPCIONAL) Y CORREGIR (OBLIGATORIO)
                         OutlinedTextField(
                             value = estado.observacion,
                             onValueChange = { vmF.onObservacionChange(it) },
@@ -146,8 +146,7 @@ fun GestorFormScreen(
                             maxLines = 5
                         )
 
-
-                        // Campo de Motivo de Rechazo: Exclusivo para RECHAZO (obligatorio)
+                        // CAMPO DE MOTIVO DE RECHAZO: EXCLUSIVO PARA MODO RECHAZO Y ES OBLIGATORIO
                         if (modo == "RECHAZO") {
                             OutlinedTextField(
                                 value = estado.motivoRechazo,
@@ -170,11 +169,10 @@ fun GestorFormScreen(
 
                         Spacer(modifier = Modifier.height(8.dp))
 
-                        // Botón Principal de Confirmación
+                        // BOTON PRINCIPAL DE CONFIRMACION
                         Button(
                             onClick = {
                                 if(vmF.validarForm()) {
-                                    // Aquí manejas la acción de guardado pasándole el ID que ya tienes
                                     vmF.actualizarVenta(
                                         venta = venta!!,
                                         gestor = username,

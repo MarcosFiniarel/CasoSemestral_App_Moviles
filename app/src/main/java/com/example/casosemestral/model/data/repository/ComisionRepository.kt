@@ -15,10 +15,7 @@ class ComisionRepository(
         const val PORCENTAJE_COMISION_DEFECTO = 0.05 // 5%
     }
 
-    /**
-     * Prepara en memoria la cabecera y el detalle del reporte para el vendedor,
-     * sin guardar nada en Room todavía (ideal para mostrarlo luego en una DetailCard).
-     */
+    // PREPARA LA CABECERA Y EL DETALLE DEL REPORTE SOLO EN LO VISUAL
     suspend fun prepararCalculoComision(
         nombreVendedor: String,
         porcentaje: Double = PORCENTAJE_COMISION_DEFECTO
@@ -35,7 +32,7 @@ class ComisionRepository(
 
         val detalles = ventasPendientes.map { venta ->
             ReporteComisionDetalleEntity(
-                reporte_id = 0L, // Se asigna al emitir en la transacción
+                reporte_id = 0L,
                 venta_id = venta.id,
                 cliente = venta.cliente,
                 convenio_o_servicio = venta.convenio_o_servicio,
@@ -59,10 +56,7 @@ class ComisionRepository(
         return reporteCalculado to detalles
     }
 
-    /**
-     * Persiste oficialmente el reporte y sus detalles, y marca las ventas
-     * correspondientes con contadoEnComision = true.
-     */
+    // SE EMITE EL REPORTE MOSTRADO EN PANTALLA Y SE GUARDA EN PERSISTENCIA Y MARCA LAS VENTAS EN EL COMO CONTADAS EN UNA COMISION PARA EVITAR DUPLICIDAD
     suspend fun emitirReporteComision(
         reporte: ReporteComisionEntity,
         detalles: List<ReporteComisionDetalleEntity>

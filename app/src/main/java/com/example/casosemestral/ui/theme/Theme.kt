@@ -74,7 +74,7 @@ private val DarkColorScheme = darkColorScheme(
     onSurface = Color(0xFFE6DFD5),       // Texto en superficies
 
     error = Color(0xFFE2B2A6),           // Tono terracota suave para errores en oscuro
-    onError = Color(0xFF421D16),         // Texto oscuro sobre error
+    onError = Color(0xFFEE2C07),         // Texto oscuro sobre error
     errorContainer = Color(0xFF4A2520),  // Contenedor de error oscuro
     onErrorContainer = Color(0xFFF7D8D2) // Texto claro para error
 )
@@ -94,7 +94,7 @@ private val LightColorScheme = lightColorScheme(
     onBackground = Color(0xFF332B25),    // Texto general café oscuro muy legible
     onSurface = Color(0xFF332B25),       // Texto en superficies
 
-    error = Color(0xFF8C4A40),           // Terracota / vino cálido para validaciones y bordes de error
+    error = Color(0xFFBD1E06),           // Terracota / vino cálido para validaciones y bordes de error
     onError = Color(0xFFFFFFFF),         // Texto blanco sobre error
     errorContainer = Color(0xFFD9B9B3),  // Contenedor crema-terracota suave para Snackbar de error/borrar
     onErrorContainer = Color(0xFF3B120D) // Texto oscuro para el contenedor de error

@@ -67,7 +67,7 @@ fun ComisionScreen(
     var dropdownExpandido by remember { mutableStateOf(false) }
     val scrollContenido = rememberScrollState()
 
-    // Escucha eventos/alertas (como intentar emitir sin ventas disponibles)
+    // ESCUCHA EVENTOS/ALERTAS (COMO INTENTAR EMITIR SIN VENTAS DISPONIBLES)
     LaunchedEffect(Unit) {
         vm.mensajeEvento.collect { mensaje ->
             snackbarHostState.showSnackbar(mensaje)

@@ -49,7 +49,7 @@ interface VentaDao {
     @Query("SELECT COUNT(*) FROM venta WHERE estado = 'Enviado' AND visto_gestor = 0")
     fun contarNuevasParaGestor(): Flow<Int>
 
-    // Contador para la burbuja del Vendedor (ventas ya auditadas aún no vistas por vendedor)
+    // CONTADOR PARA LA BURBUJA DEL VENDEDOR (VENTAS YA AUDITADAS AUN NO VISTAS POR EL VENDEDOR)
     @Query(
         """
                 SELECT COUNT(*) FROM venta 
@@ -60,11 +60,11 @@ interface VentaDao {
     )
     fun contarNovedadesParaVendedor(nombreVendedor: String): Flow<Int>
 
-    // Marcar como vistas por el gestor todas las ventas enviadas
+    // MARCAR COMO VISTAS POR EL GESTOR TODAS LAS VENTAS ENVIADAS
     @Query("UPDATE venta SET visto_gestor = 1 WHERE estado = 'Enviado' AND visto_gestor = 0")
     suspend fun marcarVistasPorGestor()
 
-    // Marcar como vistas por el vendedor sus ventas auditadas
+    // MARCAR COMO VISTAS POR EL VENDEDOR SUS VENTAS AUDITADAS
     @Query(
         """
                 UPDATE venta SET visto_vendedor = 1 
@@ -93,7 +93,7 @@ interface VentaDao {
     )
     suspend fun marcarHistoricoVistoPorGestor()
 
-    // Ventas aprobadas aún no contabilizadas en comisión para un vendedor
+    // VENTAS APROBADAS AUN NO CONTABILIZADAS EN COMISION PARA UN VENDEDOR
     @Query(
         """
     SELECT * FROM venta
@@ -105,7 +105,7 @@ interface VentaDao {
     )
     suspend fun obtenerVentasAprobadasNoComisionadas(nombreVendedor: String): List<VentaEntity>
 
-    // Marcar un conjunto de IDs de ventas como ya contabilizadas en comisión
+    // MARCAR UN CONJUNTO DE ID'S DE VENTAS COMO YA CONTABILIZADAS EN COMISION
     @Query("UPDATE venta SET contadoEnComision = 1 WHERE id IN (:ventaIds)")
     suspend fun marcarVentasComoComisionadas(ventaIds: List<Long>)
 

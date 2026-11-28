@@ -15,7 +15,7 @@ interface ReporteComisionDao {
     @Insert
     suspend fun insertarDetalles(detalles: List<ReporteComisionDetalleEntity>)
 
-    // Inserta el encabezado del reporte y todas sus líneas de detalle de forma atómica
+    // INSERTA EL ENCABEZADO DEL REPORTE Y TODAS SUS LINEAS DE DETALLE DE FORMA ATOMICA
     @Transaction
     suspend fun emitirReporteConDetalles(
         reporte: ReporteComisionEntity,
@@ -27,7 +27,7 @@ interface ReporteComisionDao {
         return reporteId
     }
 
-    // Último reporte emitido para un vendedor (útil para determinar fecha_inicio automática)
+    // OBTENER EL ULTIMO REPORTE EMITIDO PARA UN VENDEDOR
     @Query(
         """
         SELECT * FROM reporte_comision
@@ -38,14 +38,14 @@ interface ReporteComisionDao {
     )
     suspend fun obtenerUltimoReporteDeVendedor(nombreVendedor: String): ReporteComisionEntity?
 
-    // Historial general de reportes emitidos (o filtrar por vendedor si lo necesitas)
+    // HISTORIAL GENERAL DE REPORTES EMITIDOS
     @Query("SELECT * FROM reporte_comision ORDER BY fecha_emision DESC, id DESC")
     fun obtenerTodosLosReportes(): Flow<List<ReporteComisionEntity>>
 
     @Query("SELECT * FROM reporte_comision WHERE vendedor = :nombreVendedor ORDER BY fecha_emision DESC, id DESC")
     fun obtenerReportesPorVendedor(nombreVendedor: String): Flow<List<ReporteComisionEntity>>
 
-    // Detalle de ventas liquidadas dentro de un reporte específico
+    // DETALLE DE VENTAS LIQUIDADAS DENTRO DE UN REPORTE ESPECIFICO
     @Query("SELECT * FROM reporte_comision_detalle WHERE reporte_id = :reporteId ORDER BY id ASC")
     fun obtenerDetallesDeReporte(reporteId: Long): Flow<List<ReporteComisionDetalleEntity>>
 }

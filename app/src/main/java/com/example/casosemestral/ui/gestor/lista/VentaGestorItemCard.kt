@@ -54,7 +54,7 @@ fun VentaGestorItemCard(
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            // Cabecera: ID de la venta y Estado actual
+            // CABECERA: ID DE LA VENTA Y ESTADO ACTUAL
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -104,9 +104,9 @@ fun VentaGestorItemCard(
 
             }
 
-            // Datos clave de la venta
+            // DATOS CLAVE DE LA VENTA
             Text(
-                text = "Vendedor: ${venta.vendedor_responsable}", // Muestra el vendedor que hizo la gestión
+                text = "Vendedor: ${venta.vendedor_responsable}",
                 style = MaterialTheme.typography.bodyMedium,
                 fontWeight = FontWeight.Medium,
                 color = MaterialTheme.colorScheme.secondary
@@ -140,7 +140,7 @@ fun VentaGestorItemCard(
 
             HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp), thickness = 0.5.dp)
 
-            // Botonera inferior exclusiva para el Gestor
+            // BOTONERA INFERIOR EXCLUSIVA PARA EL GESTOR
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.End,

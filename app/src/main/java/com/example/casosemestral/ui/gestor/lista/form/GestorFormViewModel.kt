@@ -31,7 +31,7 @@ class GestorFormViewModel(
     // ESTADO EXPUESTO PARA LA UI
     val estado: StateFlow<GestorFormUiState> = _estado
 
-    // Estado interno para almacenar la venta que vamos a auditar
+    // ESTADO INTERNO PARA ALMACENAR LA VENTA QUE SE VA A AUDITAR
     private val _venta = MutableStateFlow<VentaEntity?>(null)
     val venta: StateFlow<VentaEntity?> = _venta
 
@@ -105,7 +105,7 @@ class GestorFormViewModel(
 
     }
 
-    // Función que genera los caracteres aleatorios en mayúsculas y números (longitud deseada)
+    // FUNCION QUE GENERA LOS CARACTERES ALEATORIOS EN MAYUSCULAS Y NUMEROS
     private fun generarCadenaAleatoria(longitud: Int = 13): String {
         val caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
         return (1..longitud)
@@ -113,9 +113,9 @@ class GestorFormViewModel(
             .joinToString("")
     }
 
-    // Función con bucle de seguridad para garantizar unicidad absoluta y prefijo dinámico
+    // FUNCION CON BUCLE DE SEGURIDAD PARA GARANTIZAR UNICIDAD ABSOLUTA Y PREFIJO DINAMICO
     private suspend fun obtenerCodigoUnicoGarantizado(modo: String): String {
-        // 1. Definir el prefijo según el modo de auditoría
+        // SE DEFINE EL PREFIJO SEGUN EL MODO DE AUDITORIA
         val prefijo = when (modo) {
             "APROBAR" -> "APR-"
             "RECHAZO" -> "REC-"
@@ -126,15 +126,15 @@ class GestorFormViewModel(
         var codigoCandidato: String
         var existe: Int
 
-        // 2. Bucle de reintento controlado (evita colisiones con el índice UNIQUE de la BD)
+        // BUCLE DE REINTENTO EN CASO DE ENCONTRAR LA MISMA CLAVE YA EXISTENTE EN LA PERSISTENCIA
         do {
-            // Generamos el cuerpo aleatorio de 13 caracteres (Prefijo 4 + 13 = 16 caracteres totales aprox)
+            // SE GENERA EL CUERPO DE LA CADENA
             val cuerpoAleatorio = generarCadenaAleatoria(13)
             codigoCandidato = "$prefijo$cuerpoAleatorio"
 
-            // Consultamos a la base de datos si este código ya existe
+            // SE VERIFICA LA EXISTENCIA O NO DE ESTA CADENA
             existe = repo.contarCodigo(codigoCandidato)
-        } while (existe > 0) // Si ya existe (> 0), el bucle repite la iteración al instante
+        } while (existe > 0)
 
         return codigoCandidato
     }
